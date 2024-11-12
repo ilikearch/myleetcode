@@ -136,3 +136,40 @@ public:
         return evalRPN(v); 
     }        
 };
+class Solution {
+public:
+    int calculate(string s) {
+        stack<int> ops; // 用于存储符号的栈
+        ops.push(1); // 初始时，栈中放入正号
+        int sign = 1; // 当前符号，1表示正号，-1表示负号
+
+        int ret = 0;
+        int n = s.length();
+        int i = 0;
+        while (i < n) {
+            if (s[i] == ' ') { // 跳过空格
+                i++;
+            } else if (s[i] == '+') { // 处理加号
+                sign = ops.top(); // 取栈顶符号作为当前符号
+                i++;
+            } else if (s[i] == '-') { // 处理减号
+                sign = -ops.top(); // 取栈顶符号的相反数作为当前符号
+                i++;
+            } else if (s[i] == '(') { // 处理左括号
+                ops.push(sign); // 将当前符号入栈
+                i++;
+            } else if (s[i] == ')') { // 处理右括号
+                ops.pop(); // 右括号时，弹出栈顶符号
+                i++;
+            } else {
+                long num = 0; // 存储当前数字
+                while (i < n && s[i] >= '0' && s[i] <= '9') {
+                    num = num * 10 + s[i] - '0'; // 计算当前数字的值
+                    i++;
+                }
+                ret += sign * num; // 根据符号累加结果
+            }
+        }
+        return ret;
+};
+
